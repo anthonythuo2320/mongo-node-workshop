@@ -2,7 +2,7 @@ const fs = require('fs');
 const express = require('express');
 const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
-const mongoConnection=process.env.MONGODB_URI ||'mongodb://localhost:27017/profile%E2%80%99;'
+const mongoConnection=process.env.MONGODB_URI ||'mongodb://localhost:27017/profile;'
 
 router.get('/', function (req, res) {
     // Write code to connect to database and return posts
