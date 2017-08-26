@@ -9,6 +9,7 @@ router.get('/', function (req, res) {
     
 
     MongoClient.connect(mongoConnection, (err, db) => {
+        console.log(err)
         const cursor = db.collection('posts').find({});
         cursor.toArray((error, posts) => {
             db.close();
