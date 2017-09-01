@@ -2,25 +2,35 @@ const fs = require('fs');
 const express = require('express');
 const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
-const mongoConnection=process.env.MONGODB_URI ||'mongodb://localhost:27017/profile;'
+const ObjectID = require('mongodb').ObjectID;
+const dbClient = require('../helpers/dbClient')
+const mongoConnection = process.env.MONGODB_URI || 'mongodb://localhost:27017/profile;'
 
-router.get('/', function (req, res) {
-    // Write code to connect to database and return posts
-    
-
-    MongoClient.connect(mongoConnection, (err, db) => {
-        console.log(err)
-        const cursor = db.collection('posts').find({});
-        cursor.toArray((error, posts) => {
-            db.close();
-            // res.json(posts);
-            res.render('index', {
-                title: "Anthony's profile",
-                subheading: "A modern Website built in Node with Handlebars",
-                posts: posts
-            });
+router.get('/', (req, res) => {
+    const callback = (error, posts) => {
+        res.render('index', {
+            title: "Anthony's profile",
+            subheading: "A Great Website driven by a database",
+            posts: posts
         });
-    });
+    };
+    dbClient.getPosts({}, callback);
+});
+
+router.get('/post-:postId', (req, res) => {
+    const postId = req.params.postId;
+
+    const callback = (error, posts) => {
+
+        res.render('single-post', {
+            title: posts[0].title,
+            subheading: "A Great Website driven by a database",
+            post: posts[0]
+        });
+    }
+    dbClient.getPosts({
+        _id: ObjectID(postId)
+    }, callback);
 });
 
 
